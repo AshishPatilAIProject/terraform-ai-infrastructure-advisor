@@ -1,4 +1,4 @@
-def calculate_score(severity: str):
+def calculate_score(severity: str) -> int:
 
     severity = severity.upper()
 

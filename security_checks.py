@@ -1,27 +1,34 @@
-def run_security_checks(terraform_code: str):
-    findings = []
+from typing import List
+from models import Finding
+
+def run_security_checks(terraform_code: str) -> List[Finding]:
+    findings: List[Finding] = []
     findings.extend(check_open_ssh(terraform_code))
     findings.extend(check_s3_encryption(terraform_code))
     return findings
 
 
-def check_open_ssh(terraform_code: str):
+def check_open_ssh(terraform_code: str) -> List[Finding]:
     if 'cidr_blocks = ["0.0.0.0/0"]' in terraform_code:
-        return [{
-            "title": "Open Internet Access Detected",
-            "category": "open_ssh",
-            "severity": "HIGH",
-            "source": "rule-engine"
-        }]
+        return [
+            Finding(
+                title="Open Internet Access Detected",
+                category="open_ssh",
+                severity="HIGH",
+                source="rule-engine"
+            )
+        ]
     return []
 
-def check_s3_encryption(terraform_code: str):
+def check_s3_encryption(terraform_code: str) -> List[Finding]:
     if "aws_s3_bucket" in terraform_code:
         if "server_side_encryption_configuration" not in terraform_code:
-            return [{
-                "title": "S3 Bucket Missing Encryption",
-                "category": "s3_encryption",
-                "severity": "HIGH",
-                "source": "rule-engine"
-            }]
+            return [
+                Finding(
+                    title="S3 Bucket Missing Encryption",
+                    category="s3_encryption",
+                    severity="HIGH",
+                    source="rule-engine"
+            )
+        ]
     return []

@@ -1,12 +1,14 @@
 from openai import OpenAI
 import json
+from typing import List
 from dotenv import load_dotenv
+from models import Finding
 
 load_dotenv()
 
 client = OpenAI()
 
-def review_terraform(terraform_code: str):
+def review_terraform(terraform_code: str) -> List[Finding]:
 
     with open("prompt.md", "r") as f:
         prompt = f.read().format(terraform_code=terraform_code)
@@ -17,13 +19,16 @@ def review_terraform(terraform_code: str):
     )
 
     raw = response.output_text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-    
-    findings = []
-    for finding in json.loads(raw)["findings"]:
-        findings.append({
-            "title": finding["title"],
-            "severity": finding["severity"],
-            "recommendation": finding["recommendation"],
-            "source": "llm"
-        })
+
+    findings: List[Finding] = []
+    for item in json.loads(raw)["findings"]:
+        findings.append(
+            Finding(
+                title=item["title"],
+                category=item["category"],
+                severity=item["severity"],
+                recommendation=item["recommendation"],
+                source="llm"
+            )
+        )
     return findings

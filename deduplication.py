@@ -1,13 +1,17 @@
-def deduplicate_findings(findings):
+from typing import List
+from models import Finding
+
+
+def deduplicate_findings(findings: List[Finding]) -> List[Finding]:
     seen = set()
-    unique = []
+    unique: List[Finding] = []
 
     for finding in findings:
 
-        title = finding["title"].lower()
+        category = finding.category
 
-        if title not in seen:
-            seen.add(title)
+        if category not in seen:
+            seen.add(category)
             unique.append(finding)
 
     return unique
