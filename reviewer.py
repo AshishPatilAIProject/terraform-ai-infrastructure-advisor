@@ -5,6 +5,7 @@ from terraform_reviewer import review_terraform
 import argparse
 from security_checks import run_security_checks
 from risk_scoring import calculate_score
+from deduplication import deduplicate_findings
 
 parser = argparse.ArgumentParser()
 
@@ -25,13 +26,14 @@ combined_findings.extend(rule_findings)
 combined_findings.extend(ai_review)
 for finding in combined_findings:
     finding["score"] = calculate_score(finding["severity"])
-
+combined_findings = deduplicate_findings(combined_findings)
 print(combined_findings)
 
 total_score = sum(
     finding["score"]
     for finding in combined_findings
 )
+
 
 print(total_score)
 

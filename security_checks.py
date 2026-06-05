@@ -9,6 +9,7 @@ def check_open_ssh(terraform_code: str):
     if 'cidr_blocks = ["0.0.0.0/0"]' in terraform_code:
         return [{
             "title": "Open Internet Access Detected",
+            "category": "open_ssh",
             "severity": "HIGH",
             "source": "rule-engine"
         }]
@@ -19,6 +20,7 @@ def check_s3_encryption(terraform_code: str):
         if "server_side_encryption_configuration" not in terraform_code:
             return [{
                 "title": "S3 Bucket Missing Encryption",
+                "category": "s3_encryption",
                 "severity": "HIGH",
                 "source": "rule-engine"
             }]
