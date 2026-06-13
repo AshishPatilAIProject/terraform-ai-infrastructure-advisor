@@ -194,7 +194,7 @@ Security Checks     AI Reviewer
       Terratest Generator
                |
                v
-        Updated AnalysisState
+      Updated AnalysisState
 ```
 
 ---
@@ -430,8 +430,6 @@ func TestTerraformModule(t *testing.T) {
 * Shared workflow state model
 
 ---
-
-## Roadmap
 
 ## Roadmap
 
