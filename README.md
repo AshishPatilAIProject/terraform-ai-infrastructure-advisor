@@ -485,14 +485,14 @@ func TestTerraformModule(t *testing.T) {
 ## Roadmap
 
 ### v0.3.0
-- Compliance Mapping (CIS, SOC2, PCI-DSS)
-- Cost Optimization Advisor
-- Drift Detection
-
-### v0.4.0
 - FastAPI REST API
 - Multi-Agent Review Workflow
 - PDF Report Export
+
+### v0.4.0
+- Compliance Mapping (CIS, SOC2, PCI-DSS)
+- Cost Optimization Advisor
+- Drift Detection
 
 ### v0.5.0
 - GitHub Pull Request Review Bot

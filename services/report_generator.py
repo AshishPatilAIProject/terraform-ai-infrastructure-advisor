@@ -1,9 +1,7 @@
 from models.analysis_state import AnalysisState
 
 
-def generate_html_report(
-    state: AnalysisState
-) -> str:
+def generate_html_report(state: AnalysisState) -> str:
 
     findings_html = ""
 
@@ -23,6 +21,27 @@ def generate_html_report(
     else:
         risk_level = "LOW"
         risk_class = "risk-low"
+
+    if state.remediation_plan:
+
+        remediation_html = f"""
+        <div>
+            {state.remediation_plan.replace(chr(10), "<br>")}
+        </div>
+        """
+
+    else:
+
+        remediation_html = f"""
+        <div class="info-box">
+            Remediation generation was skipped because the total risk score
+            ({state.total_score}) is below the configured threshold (20).
+
+            The workflow generated findings, risk scoring, executive summary,
+            Terratest output, and HTML reporting, but did not invoke the
+            remediation LLM node.
+        </div>
+        """
 
     for finding in state.findings:
 
@@ -221,6 +240,14 @@ pre {{
     font-weight: 600;
 }}
 
+.info-box {{
+    background: #eff6ff;
+    color: #1e40af;
+    border-left: 4px solid #2563eb;
+    padding: 15px;
+    border-radius: 8px;
+}}
+
 .footer {{
     margin-top: 30px;
     text-align: center;
@@ -342,7 +369,7 @@ pre {{
     </h2>
 
     <div>
-    {state.remediation_plan.replace(chr(10), "<br>")}
+    {remediation_html}
 </div>
 
 </div>

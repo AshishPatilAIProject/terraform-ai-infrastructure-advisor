@@ -9,6 +9,7 @@ from services.test_generator import generate_tests
 from services.remediation_generator import generate_remediation
 from services.executive_summary_generator import generate_executive_summary
 from services.report_generator import (generate_html_report)
+from langgraph.graph import END
 import os
 
 def parse_node(state: AnalysisState):
@@ -92,6 +93,13 @@ def score_node(state: AnalysisState):
 
     return state
 
+def findings_router(state: AnalysisState):
+
+    if len(state.findings) == 0:
+        return "report"
+
+    return "summary"
+
 def test_generation_node(
     state: AnalysisState
 ):
@@ -160,6 +168,17 @@ def report_node(state: AnalysisState):
 
     return state
 
+def risk_router(
+    state: AnalysisState
+):
+
+    if state.total_score >= 20:
+        print("HIGH RISK PATH")
+        return "high_risk"
+
+    print("LOW RISK PATH")
+    return "low_risk"
+
 builder = StateGraph(AnalysisState)
 
 builder.add_node(
@@ -227,14 +246,22 @@ builder.add_edge(
     "score"
 )
 
-builder.add_edge(
+builder.add_conditional_edges(
     "score",
-    "executive_summary"
+    findings_router,
+    {
+        "summary": "executive_summary",
+        "report": "report"
+    }
 )
 
-builder.add_edge(
+builder.add_conditional_edges(
     "executive_summary",
-    "remediation"
+    risk_router,
+    {
+        "high_risk": "remediation",
+        "low_risk": "generate_tests"
+    }
 )
 
 builder.add_edge(
