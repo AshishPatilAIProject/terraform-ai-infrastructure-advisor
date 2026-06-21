@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>
+Terraform AI Infrastructure Advisor Report
+</title>
+
+<style>
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f7fb;
+    margin: 0;
+    padding: 30px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: auto;
+}
+
+.header {
+    background: #1f2937;
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
+}
+
+.card-title {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.card-value {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.section {
+    background: white;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
+}
+
+h1 {
+    margin: 0;
+}
+
+h2 {
+    margin-top: 0;
+    color: #111827;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #111827;
+    color: white;
+    padding: 12px;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.severity-high {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.severity-medium {
+    color: #f59e0b;
+    font-weight: bold;
+}
+
+.severity-low {
+    color: #10b981;
+    font-weight: bold;
+}
+
+pre {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.risk-badge {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.risk-high {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.risk-medium {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.risk-low {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.category-badge {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+    <h1>
+        Terraform AI Infrastructure Advisor
+    </h1>
+
+    <div class="risk-badge risk-high">
+        HIGH RISK
+    </div>
+
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <div class="card-title">
+            Risk Score
+        </div>
+
+        <div class="card-value">
+            21
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            High Findings
+        </div>
+
+        <div class="card-value">
+            2
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            Medium Findings
+        </div>
+
+        <div class="card-value">
+            0
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            Low Findings
+        </div>
+
+        <div class="card-value">
+            1
+        </div>
+    </div>
+
+    <div class="card">
+    <div class="card-title">
+        Resources Analyzed
+    </div>
+
+    <div class="card-value">
+        1
+    </div>
+</div>
+
+</div>
+
+<div class="section">
+
+    <h2>
+        Executive Summary
+    </h2>
+
+    <div>
+    Overall Risk: HIGH<br><br>Top Risks:<br>- S3 Bucket Missing Encryption<br>- S3 bucket public access not restricted<br><br>Business Impact:<br>Unencrypted S3 buckets and unrestricted public access expose sensitive data to unauthorized users, increasing the risk of data breaches and regulatory non-compliance. Lack of versioning further limits data recovery options after accidental deletions or modifications, impacting business continuity.<br><br>Recommended Action:<br>Enable encryption on all S3 buckets to protect data at rest. Restrict public access policies to prevent unauthorized data exposure. Implement versioning on S3 buckets to enhance data resiliency and recovery capabilities.<br><br>Total Risk Score:<br>21
+</div>
+
+</div>
+
+<div class="section">
+
+    <h2>
+        Findings
+    </h2>
+
+    <table>
+
+        <tr>
+            <th>Severity</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Score</th>
+        </tr>
+
+        
+        <tr>
+            <td class="severity-high">
+                HIGH
+            </td>
+            <td>S3 Bucket Missing Encryption</td>
+            <td>
+    <span class="category-badge">
+        s3_encryption
+    </span>
+</td>
+            <td>10</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-low">
+                LOW
+            </td>
+            <td>S3 bucket has no versioning enabled</td>
+            <td>
+    <span class="category-badge">
+        s3_versioning
+    </span>
+</td>
+            <td>1</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-high">
+                HIGH
+            </td>
+            <td>S3 bucket public access not restricted</td>
+            <td>
+    <span class="category-badge">
+        s3_public_access
+    </span>
+</td>
+            <td>10</td>
+        </tr>
+        
+
+    </table>
+
+</div>
+
+<div class="section">
+
+    <h2>
+        Remediation Plan
+    </h2>
+
+    <div>
+    Finding: S3 Bucket Missing Encryption  <br>Risk: Unencrypted S3 buckets expose sensitive data to unauthorized access, increasing the risk of data breaches and regulatory non-compliance. Data at rest is vulnerable to interception or theft without encryption.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "your-bucket-name"<br>  <br>  server_side_encryption_configuration {<br>    rule {<br>      apply_server_side_encryption_by_default {<br>        sse_algorithm = "AES256"<br>      }<br>    }<br>  }<br>}<br>```<br><br>Finding: S3 bucket has no versioning enabled  <br>Risk: Without versioning, accidental deletions or overwrites of objects are irreversible, leading to potential data loss or corruption. Versioning enables easier recovery and data integrity.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket_versioning" "example_versioning" {<br>  bucket = aws_s3_bucket.example.id<br><br>  versioning_configuration {<br>    status = "Enabled"<br>  }<br>}<br>```<br><br>Finding: S3 bucket public access not restricted  <br>Risk: Public access to S3 buckets can expose sensitive data to anyone on the internet, leading to data leaks and unauthorized data manipulation. It violates security best practices.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket_public_access_block" "example_public_access" {<br>  bucket = aws_s3_bucket.example.id<br><br>  block_public_acls       = true<br>  block_public_policy     = true<br>  ignore_public_acls      = true<br>  restrict_public_buckets = true<br>}<br>```
+</div>
+
+</div>
+
+<div class="section">
+
+    <h2>
+        Generated Terratest
+    </h2>
+
+    <pre>```go
+package test
+
+import (
+	"testing"
+	"os"
+	"os/exec"
+	"path/filepath"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
+)
+
+// Since the Terraform code was not provided, this is a generic Terratest example.
+// Replace variables and paths according to your Terraform configuration.
+
+func TestTerraformExample(t *testing.T) {
+	t.Parallel()
+
+	// Copy Terraform folder to temp folder to run tests in isolated environment
+	tempTestFolder := filepath.Join(os.TempDir(), "terratest-example")
+	err := os.MkdirAll(tempTestFolder, 0755)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Copy files (if needed)
+	// e.g. copy your terraform files to tempTestFolder, if your test depends on it
+
+	terraformOptions := &terraform.Options{
+		// Path to Terraform code
+		TerraformDir: "../path-to-your-terraform-code",
+
+		// Variables to pass to Terraform
+		Vars: map[string]interface{}{
+			// "variable_name": "value",
+		},
+
+		// Disable colors in Terraform commands so its easier to parse stdout/stderr
+		NoColor: true,
+	}
+
+	// Clean up resources with "terraform destroy" at the end of the test
+	defer terraform.Destroy(t, terraformOptions)
+
+	// Run "terraform init" and "terraform apply"
+	terraform.InitAndApply(t, terraformOptions)
+
+	// Add your test assertions here
+	// For example, check the output variable value:
+	output := terraform.Output(t, terraformOptions, "example_output")
+	expectedOutput := "expected_value"
+	assert.Equal(t, expectedOutput, output)
+}
+```</pre>
+
+</div>
+
+<div class="footer">
+    Generated by Terraform AI Infrastructure Advisor
+    <br>
+    LangGraph • OpenAI • Terraform
+</div>
+
+</div>
+
+</body>
+</html>

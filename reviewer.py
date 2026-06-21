@@ -28,3 +28,6 @@ print("\nRemediation Plan")
 print("=" * 40)
 print(result["remediation_plan"])
 
+print("\nExecutive Summary")
+print("=" * 40)
+print(result["executive_summary"])

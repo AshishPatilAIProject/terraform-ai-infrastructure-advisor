@@ -7,6 +7,9 @@ from services.deduplication import deduplicate_findings
 from services.risk_scoring import calculate_score
 from services.test_generator import generate_tests
 from services.remediation_generator import generate_remediation
+from services.executive_summary_generator import generate_executive_summary
+from services.report_generator import (generate_html_report)
+import os
 
 def parse_node(state: AnalysisState):
 
@@ -114,6 +117,49 @@ def remediation_node(state: AnalysisState):
 
     return state
 
+def executive_summary_node(state: AnalysisState):
+
+    state.executive_summary = (
+        generate_executive_summary(
+            state.findings,
+            state.total_score
+        )
+    )
+
+    print(
+        "Generated Executive Summary"
+    )
+
+    return state
+
+def report_node(state: AnalysisState):
+
+    state.report_html = (
+        generate_html_report(
+            state
+        )
+    )
+
+    os.makedirs(
+        "reports",
+        exist_ok=True
+    )
+
+    with open(
+        "reports/report.html",
+        "w",
+        encoding="utf-8"
+    ) as f:
+        f.write(
+            state.report_html
+        )
+
+    print(
+        "Generated HTML Report"
+    )
+
+    return state
+
 builder = StateGraph(AnalysisState)
 
 builder.add_node(
@@ -151,6 +197,16 @@ builder.add_node(
     remediation_node
 )
 
+builder.add_node(
+    "executive_summary",
+    executive_summary_node
+)
+
+builder.add_node(
+    "report",
+    report_node
+)
+
 builder.add_edge(
     "parse",
     "security"
@@ -173,6 +229,11 @@ builder.add_edge(
 
 builder.add_edge(
     "score",
+    "executive_summary"
+)
+
+builder.add_edge(
+    "executive_summary",
     "remediation"
 )
 
@@ -181,11 +242,16 @@ builder.add_edge(
     "generate_tests"
 )
 
+builder.add_edge(
+    "generate_tests",
+    "report"
+)
+
 builder.set_entry_point(
     "parse"
 )
 builder.set_finish_point(
-    "generate_tests"
+    "report"
 )
 graph = builder.compile()
 

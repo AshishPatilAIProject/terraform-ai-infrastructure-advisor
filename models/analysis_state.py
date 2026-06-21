@@ -23,3 +23,5 @@ class AnalysisState:
     remediation_plan: str = ""
 
     executive_summary: str = ""
+
+    report_html: str = ""
