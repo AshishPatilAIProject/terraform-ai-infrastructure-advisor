@@ -21,18 +21,37 @@ The workflow is orchestrated using LangGraph, with a shared AnalysisState flowin
 ## Features
 
 ## Key Capabilities
-
-- Terraform Parsing
-- Rule-Based Security Analysis
-- AI-Powered Infrastructure Review
-- Finding Categorization
-- Deduplication Engine
-- Risk Scoring Engine
-- Executive Summary Generation
-- AI Remediation Planning
-- Terratest Generation
-- HTML Dashboard Reporting
-- LangGraph Workflow Orchestration
+Terraform Analysis
+Terraform resource parsing
+Resource inventory generation
+Infrastructure metadata extraction
+Security Review
+Rule-based security checks
+AI-powered infrastructure review
+Finding categorization
+Severity normalization
+Risk Assessment
+Risk scoring engine
+Deduplication of findings
+Overall security posture evaluation
+AI Infrastructure Advisor
+Executive summary generation
+AI remediation planning
+Terraform fix recommendations
+Testing
+Terratest generation
+Infrastructure validation templates
+Reporting
+Interactive HTML dashboard
+Executive summary section
+Findings table
+Workflow execution visualization
+Remediation guidance
+Generated test scripts
+Workflow Orchestration
+LangGraph-based workflow engine
+Conditional routing
+Risk-aware execution paths
 
 ### Terraform Parsing
 
@@ -191,42 +210,91 @@ Coordinates analysis stages using a shared AnalysisState and LangGraph nodes.
 
 ---
 
+## Architecture
+
+Terraform Code
+│
+▼
+Terraform Parser
+│
+▼
+Rule-Based Security Checks
+│
+▼
+AI Security Review
+│
+▼
+Deduplication Engine
+│
+▼
+Risk Scoring Engine
+│
+▼
+Conditional Routing
+│
+├── Low Risk
+│ ├── Executive Summary
+│ ├── Test Generation
+│ └── HTML Report
+│
+└── High Risk
+├── Executive Summary
+├── Remediation Generation
+├── Test Generation
+└── HTML Report
+
 ## LangGraph Workflow
 ```text
-Terraform Code
-      │
-      ▼
-Terraform Parser
-      │
-      ▼
-Security Checks
-      │
-      ▼
+The platform uses LangGraph to orchestrate analysis and reporting.
+
+Current workflow:
+
+Parse
+↓
+Security Review
+↓
 AI Review
-      │
-      ▼
+↓
 Deduplication
-      │
-      ▼
+↓
 Risk Scoring
-      │
-      ▼
+↓
+Conditional Routing
+↓
 Executive Summary
-      │
-      ▼
-Remediation Plan
-      │
-      ▼
-Terratest Generator
-      │
-      ▼
-HTML Report Generator
-      │
-      ▼
-Dashboard Report
+↓
+Remediation (High Risk Only)
+↓
+Terratest Generation
+↓
+HTML Report
 ```
 
 ---
+
+## Conditional Routing
+
+The workflow dynamically chooses execution paths based on risk score.
+
+Low Risk Path
+
+Risk Score < 20
+
+Executive Summary
+Terratest Generation
+HTML Report
+
+Remediation generation is skipped.
+
+High Risk Path
+
+Risk Score >= 20
+
+Executive Summary
+AI Remediation Plan
+Terratest Generation
+HTML Report
+
 ## Shared Workflow State
 
 The application uses a shared AnalysisState object that flows through all LangGraph nodes.
@@ -251,12 +319,13 @@ Each node reads from and updates the state, allowing analysis stages to remain l
 
 The platform generates an interactive HTML dashboard containing:
 
-- Risk Score
-- Executive Summary
-- Findings Table
-- Remediation Plan
-- Terratest Output
-- Resource Statistics
+Risk Score
+Resource Statistics
+Workflow Execution Status
+Executive Summary
+Security Findings
+Remediation Plan
+Terratest Output
 
 Generated report:
 
@@ -308,6 +377,7 @@ terraform-ai-infrastructure-advisor/
 │   └── report_generator.py
 │
 ├── reports/
+|   └── report.html
 ├── screenshots/
 ├── reviewer.py
 └── README.md
@@ -420,66 +490,6 @@ func TestTerraformModule(t *testing.T) {
         // Optionally, add validations/assertions for your Terraform outputs here using:
         // output := terraform.Output(t, terraformOptions, "output_name")
 }
-```
-```
-
-Review S3 configuration:
-
-```bash
-python reviewer.py sample2.tf
-```
-
-Example output:
-
-```text
-Parsed: {'resources': [{'type': 'aws_s3_bucket', 'name': 'example'}]}
-Security Findings: 1
-Total Findings After AI: 4
-Deduplicated: 4 -> 3
-[HIGH] S3 Bucket Missing Encryption
-[MEDIUM] S3 Bucket Without Versioning Enabled
-[MEDIUM] S3 Bucket Missing Public Access Block Configuration
-
-Total Risk Score: 20
-
-Generated Terratest:
-========================================
-
-```go
-package test
-
-import (
-        "testing"
-        "path/filepath"
-
-        "github.com/gruntwork-io/terratest/modules/terraform"
-        "github.com/stretchr/testify/assert"
-)
-
-func TestTerraformModule(t *testing.T) {
-        t.Parallel()
-
-        terraformOptions := &terraform.Options{
-                // The path to where your Terraform code is located
-                TerraformDir: filepath.Join("..", "..", "terraform"),
-
-                // Variables to pass to Terraform
-                Vars: map[string]interface{}{},
-        }
-
-        // At the end of the test, run `terraform destroy` to clean up any resources that were created
-        defer terraform.Destroy(t, terraformOptions)
-
-        // Run `terraform init` and `terraform apply`. Fail the test if there are any errors.
-        terraform.InitAndApply(t, terraformOptions)
-
-        // Add assertions here to test the outputs or state
-        output := terraform.Output(t, terraformOptions, "example_output")
-        expected := "expected_value"
-        assert.Equal(t, expected, output)
-}
-```
-
 ```
 
 ## Roadmap
