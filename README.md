@@ -25,8 +25,6 @@ The platform is available through:
 
 ![Findings](screenshots/findings-remediation.png)
 
-## Features
-
 ## Key Capabilities
 
 **Terraform Analysis**
