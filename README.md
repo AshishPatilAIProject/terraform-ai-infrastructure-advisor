@@ -1,10 +1,17 @@
-# Terraform AI Infrastructure Advisor
+# # Terraform AI Infrastructure Advisor
 
-Terraform AI Reviewer is an AI-assisted Infrastructure-as-Code (IaC) analysis platform built using Python, OpenAI APIs, Terraform, and LangGraph.
+Terraform AI Infrastructure Advisor is an AI-powered Infrastructure-as-Code (IaC) security platform built using Python, OpenAI, LangGraph, FastAPI, and Terraform.
 
-The project combines deterministic security checks with LLM-powered Terraform reviews to identify infrastructure risks, calculate risk scores, remove duplicate findings, and generate Terratest test cases.
+The platform combines deterministic security checks with AI-powered infrastructure analysis to identify security risks, calculate risk scores, generate executive summaries, create remediation plans, produce Terratest templates, and generate interactive HTML dashboard reports.
 
-The workflow is orchestrated using LangGraph, with a shared AnalysisState flowing through multiple analysis nodes.
+The workflow is orchestrated using LangGraph with conditional routing, allowing the platform to dynamically choose execution paths based on infrastructure risk levels.
+
+The platform is available through:
+
+* Command Line Interface (CLI)
+* FastAPI REST API
+* File Upload API
+* Interactive HTML Dashboard Reports
 
 ---
 
@@ -59,6 +66,37 @@ The workflow is orchestrated using LangGraph, with a shared AnalysisState flowin
 - LangGraph-based workflow engine
 - Conditional routing
 - Risk-aware execution paths
+
+## REST API
+
+The platform exposes its LangGraph workflow through FastAPI.
+
+### Available Endpoints
+
+| Method | Endpoint            | Description                                    |
+| ------ | ------------------- | ---------------------------------------------- |
+| GET    | /                   | Health Check                                   |
+| POST   | /review             | Analyze Terraform code from JSON payload       |
+| POST   | /review/file        | Upload Terraform file for analysis             |
+| POST   | /review/file/report | Upload Terraform file and generate HTML report |
+| GET    | /report             | View latest generated HTML dashboard           |
+
+### Swagger Documentation
+
+After starting the API server:
+
+```bash
+uvicorn api.main:app --reload
+```
+
+Open:
+
+```text
+http://localhost:8000/docs
+```
+
+to explore and test all API endpoints interactively.
+
 
 ### Terraform Parsing
 
@@ -220,36 +258,42 @@ Coordinates analysis stages using a shared AnalysisState and LangGraph nodes.
 ## Architecture
 
 ```text
+## Platform Architecture
+
+```text
+
 Terraform Code
-│
-▼
-Terraform Parser
-│
-▼
-Rule-Based Security Checks
-│
-▼
-AI Security Review
-│
-▼
-Deduplication Engine
-│
-▼
-Risk Scoring Engine
-│
-▼
-Conditional Routing
-│
-├── Low Risk
-│   ├── Executive Summary
-│   ├── Test Generation
-│   └── HTML Report
-│
-└── High Risk
-    ├── Executive Summary
-    ├── Remediation Generation
-    ├── Test Generation
-    └── HTML Report
+       │
+       ▼
+FastAPI API Layer
+       │
+       ▼
+LangGraph Workflow
+       │
+ ┌─────┴─────┐
+ │           │
+ ▼           ▼
+Rule Engine  AI Review
+ │           │
+ └─────┬─────┘
+       ▼
+ Deduplication
+       ▼
+ Risk Scoring
+       ▼
+ Conditional Routing
+       │
+ ┌─────┴────────────┐
+ │                  │
+ ▼                  ▼
+Low Risk         High Risk
+ │                  │
+ ▼                  ▼
+Summary         Summary
+Tests           Remediation
+Report          Tests
+                Report
+
 ```
 
 ## LangGraph Workflow
@@ -363,6 +407,10 @@ terraform-ai-infrastructure-advisor/
 ├── graphs/
 │   └── review_graph.py
 │
+├──api/
+|   ├── main.py
+|   └── schemas.py
+|
 ├── prompts/
 │   ├── security_check_ai_prompt.md
 │   ├── generate_test_prompt.md
@@ -383,7 +431,8 @@ terraform-ai-infrastructure-advisor/
 │   ├── test_generator.py
 │   ├── executive_summary_generator.py
 │   ├── remediation_generator.py
-│   └── report_generator.py
+│   ├── report_generator.py
+|   └── report_storage.py
 │
 ├── reports/
 |   └── report.html
@@ -428,6 +477,12 @@ source venv/bin/activate
 
 ```bash
 pip install openai python-dotenv
+```
+
+Install FastAPI and Uvicorn (for the API server):
+
+```bash
+pip install fastapi uvicorn
 ```
 
 ### Configure Environment
@@ -501,15 +556,31 @@ func TestTerraformModule(t *testing.T) {
 }
 ```   
 
+### Run the API Server
+
+Start the FastAPI server with Uvicorn:
+
+```bash
+uvicorn api.main:app --reload
+```
+
+The API will be available at `http://127.0.0.1:8000`, with interactive docs at `http://127.0.0.1:8000/docs`.
+
 ## Roadmap
 
-### v0.3.0
+### v0.3.0 (Completed)
+- LangGraph Workflow Engine
+- Conditional Routing
+- Executive Summary Generator
+- Remediation Generator
+- HTML Dashboard Reporting
 - FastAPI REST API
-- Multi-Agent Review Workflow
-- PDF Report Export
+- File Upload API
+- Report Viewing Endpoint
 
 ### v0.4.0
 - Compliance Mapping (CIS, SOC2, PCI-DSS)
+- Multi-Agent Review Workflow
 - Cost Optimization Advisor
 - Drift Detection
 
@@ -517,8 +588,34 @@ func TestTerraformModule(t *testing.T) {
 - GitHub Pull Request Review Bot
 - Terraform Plan Analysis
 - CloudFormation Support
+- PDF Report Export
 
 ---
+
+## Release History
+
+v0.1.0
+- Terraform Security Review
+- Rule Engine
+- OpenAI Analysis
+- Risk Scoring
+- Terratest Generation
+
+v0.2.0
+- LangGraph Workflow Engine
+- AnalysisState
+- Deduplication Pipeline
+- Executive Summary Generation
+- Remediation Generation
+- HTML Dashboard
+
+v0.3.0
+- FastAPI REST API
+- Swagger Documentation
+- File Upload API
+- HTML Report Endpoint
+- Conditional Routing
+- Interactive Dashboard Experience
 
 ## Learning Objectives
 
