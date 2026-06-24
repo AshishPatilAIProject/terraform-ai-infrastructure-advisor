@@ -4,6 +4,9 @@ from models.analysis_state import AnalysisState
 def generate_html_report(state: AnalysisState) -> str:
 
     findings_html = ""
+    compliance_html = ""
+    cost_html = ""
+    resources_html = ""
 
     resource_count = len(
     state.parsed_terraform.get(
@@ -12,15 +15,41 @@ def generate_html_report(state: AnalysisState) -> str:
     )
     )
 
+    compliance_count = len([
+        f for f in state.findings
+        if f.source == "compliance-agent"
+    ])
+
+    cost_count = len([
+        f for f in state.findings
+        if f.source == "cost-agent"
+    ])
+
     workflow_steps = [
-    ("Parse", True),
-    ("Security Review", True),
-    ("AI Review", True),
-    ("Risk Scoring", True),
-    ("Executive Summary", bool(state.executive_summary)),
-    ("Remediation", bool(state.remediation_plan)),
-    ("Test Generation", bool(state.generated_tests)),
-    ("Report Generation", True)
+        ("Parse", True),
+        ("Security Agent", True),
+        ("Compliance Agent", compliance_count > 0),
+        ("Cost Agent", cost_count > 0),
+        ("Risk Scoring", True),
+        ("Executive Summary", bool(state.executive_summary)),
+        ("Remediation", bool(state.remediation_plan)),
+        ("Test Generation", bool(state.generated_tests)),
+        ("Report Generation", True)
+        ]
+
+    security_count = len([
+    f for f in state.findings
+        if f.source in ["rule-engine", "llm"]
+        ])
+
+    compliance_findings = [
+    f for f in state.findings
+    if f.source == "compliance-agent"
+    ]
+
+    cost_findings = [
+    f for f in state.findings
+    if f.source == "cost-agent"
     ]
 
     workflow_html = ""
@@ -96,7 +125,7 @@ def generate_html_report(state: AnalysisState) -> str:
     <span class="category-badge">
         {finding.category}
     </span>
-</td>
+        </td>
             <td>{finding.score}</td>
         </tr>
         """
@@ -124,6 +153,67 @@ def generate_html_report(state: AnalysisState) -> str:
             if f.severity == "LOW"
         ]
     )
+
+    for resource in state.parsed_terraform.get(
+    "resources",
+    []
+    ):
+
+        resources_html += f"""
+        <tr>
+            <td>{resource["type"]}</td>
+            <td>{resource["name"]}</td>
+        </tr>
+        """
+    for finding in compliance_findings:
+
+        severity_class = (
+            "severity-high"
+            if finding.severity == "HIGH"
+            else "severity-medium"
+            if finding.severity == "MEDIUM"
+            else "severity-low"
+        )
+
+        compliance_html += f"""
+        <tr>
+            <td>{finding.title}</td>
+
+            <td class="{severity_class}">
+                {finding.severity}
+            </td>
+
+            <td>
+                {finding.recommendation}
+            </td>
+        </tr>
+        """
+
+    for finding in cost_findings:
+
+        severity_class = (
+            "severity-high"
+            if finding.severity == "HIGH"
+            else "severity-medium"
+            if finding.severity == "MEDIUM"
+            else "severity-low"
+        )
+
+        cost_html += f"""
+        <tr>
+            <td>
+                {finding.title}
+            </td>
+
+            <td class="{severity_class}">
+                {finding.severity}
+            </td>
+
+            <td>
+                {finding.recommendation}
+            </td>
+        </tr>
+        """
 
     html = f"""
 <!DOCTYPE html>
@@ -382,17 +472,39 @@ pre {{
             {low_count}
         </div>
     </div>
-
-    <div class="card">
-    <div class="card-title">
-        Resources Analyzed
-    </div>
-
-    <div class="card-value">
-        {resource_count}
-    </div>
 </div>
 
+<div class="cards">
+
+    <div class="card">
+        <div class="card-title">
+            Security Agent
+        </div>
+
+        <div class="card-value">
+            {security_count}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            Compliance Agent
+        </div>
+
+        <div class="card-value">
+            {compliance_count}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            Cost Agent
+        </div>
+
+        <div class="card-value">
+            {cost_count}
+        </div>
+    </div>
 </div>
 
 <div class="section">
@@ -404,6 +516,25 @@ pre {{
     <div>
     {state.executive_summary.replace(chr(10), "<br>")}
 </div>
+
+</div>
+
+<div class="section">
+
+    <h2>
+    Infrastructure Inventory
+    </h2>
+
+    <table>
+
+    <tr>
+        <th>Resource Type</th>
+        <th>Name</th>
+    </tr>
+
+    {resources_html}
+
+    </table>
 
 </div>
 
@@ -423,6 +554,43 @@ pre {{
         </tr>
 
         {findings_html}
+
+    </table>
+
+</div>
+
+<div class="section">
+    <h2>
+    Compliance Impact
+    </h2>
+
+    <table>
+
+    <tr>
+        <th>Framework</th>
+        <th>Severity</th>
+        <th>Controls</th>
+    </tr>
+
+    {compliance_html}
+
+    </table>
+</div>
+
+<div class="section">
+    <h2>
+    Cost Optimization Opportunities
+    </h2>
+
+    <table>
+
+    <tr>
+        <th>Finding</th>
+        <th>Severity</th>
+        <th>Recommendation</th>
+    </tr>
+
+    {cost_html}
 
     </table>
 

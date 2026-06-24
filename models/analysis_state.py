@@ -16,6 +16,7 @@ class AnalysisState:
         default_factory=list
     )
 
+
     total_score: int = 0
 
     generated_tests: str = ""
@@ -23,5 +24,7 @@ class AnalysisState:
     remediation_plan: str = ""
 
     executive_summary: str = ""
+
+    compliance_report: str = ""
 
     report_html: str = ""

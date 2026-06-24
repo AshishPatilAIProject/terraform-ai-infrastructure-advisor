@@ -11,6 +11,10 @@ from services.executive_summary_generator import generate_executive_summary
 from services.report_generator import (generate_html_report)
 from langgraph.graph import END
 import os
+from services.agents.security_agent import run_security_agent
+from services.agents.compliance_agent import run_compliance_agent
+from services.agents.cost_agent import run_cost_agent
+from services.agents.compliance_agent_llm import run_compliance_llm
 
 def parse_node(state: AnalysisState):
 
@@ -54,6 +58,80 @@ def review_node(state: AnalysisState):
     print(
         "Total Findings After AI:",
         len(state.findings)
+    )
+
+    return state
+
+def security_agent_node(
+    state: AnalysisState
+):
+
+    findings = run_security_agent(
+        state.terraform_code
+    )
+
+    state.findings.extend(
+        findings
+    )
+
+    print(
+        "Security Agent Findings:",
+        len(findings)
+    )
+
+    return state
+
+def compliance_agent_node(
+    state: AnalysisState
+):
+
+    findings = run_compliance_agent(
+        state.findings
+    )
+
+    state.findings.extend(
+        findings
+    )
+
+    print(
+        "Compliance Agent Findings:",
+        len(findings)
+    )
+
+    return state
+
+def compliance_report_node(
+    state: AnalysisState
+):
+
+    state.compliance_report = (
+        run_compliance_llm(
+            state.findings
+        )
+    )
+
+    print(
+        "Generated Compliance Report"
+    )
+
+    return state
+
+def cost_agent_node(
+    state: AnalysisState
+):
+
+    findings = run_cost_agent(
+        state.terraform_code,
+        state.parsed_terraform
+    )
+
+    state.findings.extend(
+        findings
+    )
+
+    print(
+        "Cost Agent Findings:",
+        len(findings)
     )
 
     return state
@@ -192,8 +270,18 @@ builder.add_node(
 )
 
 builder.add_node(
-    "review",
-    review_node
+    "security_agent",
+    security_agent_node
+)
+
+builder.add_node(
+    "compliance_agent",
+    compliance_agent_node
+)
+
+builder.add_node(
+    "cost_agent",
+    cost_agent_node
 )
 
 builder.add_node(
@@ -233,11 +321,21 @@ builder.add_edge(
 
 builder.add_edge(
     "security",
-    "review"
+    "security_agent"
 )
 
 builder.add_edge(
-    "review",
+    "security_agent",
+    "compliance_agent"
+)
+
+builder.add_edge(
+    "compliance_agent",
+    "cost_agent"
+)
+
+builder.add_edge(
+    "cost_agent",
     "dedup"
 )
 

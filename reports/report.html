@@ -215,11 +215,15 @@ pre {
         </div>
         
         <div class="workflow-completed">
-            ✓ Security Review
+            ✓ Security Agent
         </div>
         
         <div class="workflow-completed">
-            ✓ AI Review
+            ✓ Compliance Agent
+        </div>
+        
+        <div class="workflow-completed">
+            ✓ Cost Agent
         </div>
         
         <div class="workflow-completed">
@@ -254,7 +258,7 @@ pre {
         </div>
 
         <div class="card-value">
-            25
+            48
         </div>
     </div>
 
@@ -274,7 +278,7 @@ pre {
         </div>
 
         <div class="card-value">
-            1
+            5
         </div>
     </div>
 
@@ -284,20 +288,42 @@ pre {
         </div>
 
         <div class="card-value">
-            0
+            3
+        </div>
+    </div>
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <div class="card-title">
+            Security Agent
+        </div>
+
+        <div class="card-value">
+            4
         </div>
     </div>
 
     <div class="card">
-    <div class="card-title">
-        Resources Analyzed
+        <div class="card-title">
+            Compliance Agent
+        </div>
+
+        <div class="card-value">
+            3
+        </div>
     </div>
 
-    <div class="card-value">
-        1
-    </div>
-</div>
+    <div class="card">
+        <div class="card-title">
+            Cost Agent
+        </div>
 
+        <div class="card-value">
+            3
+        </div>
+    </div>
 </div>
 
 <div class="section">
@@ -307,8 +333,42 @@ pre {
     </h2>
 
     <div>
-    Overall Risk: HIGH<br><br>Top Risks:<br>* S3 Bucket Missing Encryption (Severity: HIGH, Score: 10)<br>* S3 Bucket Public Access Is Not Restricted (Severity: HIGH, Score: 10)<br><br>Business Impact:<br>Unencrypted S3 buckets and unrestricted public access expose sensitive data to unauthorized users, increasing the risk of data breaches and regulatory non-compliance. Lack of versioning hinders data recovery and incident response capabilities.<br><br>Recommended Action:<br>Enable encryption on all S3 buckets to protect data at rest. Restrict public access by implementing appropriate bucket policies and access controls. Activate versioning to facilitate data recovery and improve resilience against accidental or malicious deletions.
+    Overall Risk: HIGH<br><br>Top Risks:<br>* S3 Bucket Missing Encryption (Severity: HIGH, Score: 10)<br>* Open SSH Security Group (Severity: HIGH, Score: 10)<br><br>Business Impact:<br>Unencrypted S3 buckets expose sensitive data to unauthorized access, heightening data breach risk. Open SSH security groups allow unrestricted inbound access, increasing vulnerability to attacks. Additional configuration gaps, such as missing S3 public access blocks and compliance risks (CIS, SOC2, PCI), further threaten data integrity and regulatory adherence. Cost inefficiencies due to non-optimized storage and oversized EC2 instances may increase operational expenses.<br><br>Recommended Action:<br>Immediately enable encryption on all S3 buckets and restrict SSH access through hardened security groups. Implement S3 public access blocks, versioning, and lifecycle policies for data protection and cost management. Address compliance gaps by aligning cloud configurations with CIS, SOC2, and PCI standards. Review EC2 instance sizing to optimize cost and performance.
 </div>
+
+</div>
+
+<div class="section">
+
+    <h2>
+    Infrastructure Inventory
+    </h2>
+
+    <table>
+
+    <tr>
+        <th>Resource Type</th>
+        <th>Name</th>
+    </tr>
+
+    
+        <tr>
+            <td>aws_s3_bucket</td>
+            <td>data</td>
+        </tr>
+        
+        <tr>
+            <td>aws_security_group</td>
+            <td>web</td>
+        </tr>
+        
+        <tr>
+            <td>aws_instance</td>
+            <td>app</td>
+        </tr>
+        
+
+    </table>
 
 </div>
 
@@ -337,34 +397,240 @@ pre {
     <span class="category-badge">
         s3_encryption
     </span>
-</td>
+        </td>
             <td>10</td>
-        </tr>
-        
-        <tr>
-            <td class="severity-medium">
-                MEDIUM
-            </td>
-            <td>S3 Bucket Does Not Have Versioning Enabled</td>
-            <td>
-    <span class="category-badge">
-        s3_versioning
-    </span>
-</td>
-            <td>5</td>
         </tr>
         
         <tr>
             <td class="severity-high">
                 HIGH
             </td>
-            <td>S3 Bucket Public Access Is Not Restricted</td>
+            <td>Open SSH Security Group</td>
+            <td>
+    <span class="category-badge">
+        open_ssh
+    </span>
+        </td>
+            <td>10</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-low">
+                LOW
+            </td>
+            <td>S3 Bucket Missing Versioning</td>
+            <td>
+    <span class="category-badge">
+        s3_versioning
+    </span>
+        </td>
+            <td>1</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+            <td>S3 Bucket Missing Public Access Block</td>
             <td>
     <span class="category-badge">
         s3_public_access
     </span>
-</td>
-            <td>10</td>
+        </td>
+            <td>5</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+            <td>CIS Compliance Impact</td>
+            <td>
+    <span class="category-badge">
+        cis_compliance
+    </span>
+        </td>
+            <td>5</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+            <td>SOC2 Compliance Impact</td>
+            <td>
+    <span class="category-badge">
+        soc2_compliance
+    </span>
+        </td>
+            <td>5</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+            <td>PCI Compliance Impact</td>
+            <td>
+    <span class="category-badge">
+        pci_compliance
+    </span>
+        </td>
+            <td>5</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-low">
+                LOW
+            </td>
+            <td>S3 Lifecycle Policy Missing</td>
+            <td>
+    <span class="category-badge">
+        cost_lifecycle
+    </span>
+        </td>
+            <td>1</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-low">
+                LOW
+            </td>
+            <td>S3 Intelligent Tiering Not Configured</td>
+            <td>
+    <span class="category-badge">
+        cost_storage
+    </span>
+        </td>
+            <td>1</td>
+        </tr>
+        
+        <tr>
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+            <td>Potentially Oversized EC2 Instance</td>
+            <td>
+    <span class="category-badge">
+        cost_ec2
+    </span>
+        </td>
+            <td>5</td>
+        </tr>
+        
+
+    </table>
+
+</div>
+
+<div class="section">
+    <h2>
+    Compliance Impact
+    </h2>
+
+    <table>
+
+    <tr>
+        <th>Framework</th>
+        <th>Severity</th>
+        <th>Controls</th>
+    </tr>
+
+    
+        <tr>
+            <td>CIS Compliance Impact</td>
+
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+
+            <td>
+                Affected CIS Controls: 2.1, 3.1, 3.2, 4.1. Review related infrastructure findings and remediate violations.
+            </td>
+        </tr>
+        
+        <tr>
+            <td>SOC2 Compliance Impact</td>
+
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+
+            <td>
+                Affected SOC2 Controls: CC6.1, CC6.6, CC6.7, CC7.2. Review related infrastructure findings and remediate violations.
+            </td>
+        </tr>
+        
+        <tr>
+            <td>PCI Compliance Impact</td>
+
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+
+            <td>
+                Affected PCI Controls: 1.2, 10.5, 3.5, 7.1. Review related infrastructure findings and remediate violations.
+            </td>
+        </tr>
+        
+
+    </table>
+</div>
+
+<div class="section">
+    <h2>
+    Cost Optimization Opportunities
+    </h2>
+
+    <table>
+
+    <tr>
+        <th>Finding</th>
+        <th>Severity</th>
+        <th>Recommendation</th>
+    </tr>
+
+    
+        <tr>
+            <td>
+                S3 Lifecycle Policy Missing
+            </td>
+
+            <td class="severity-low">
+                LOW
+            </td>
+
+            <td>
+                Configure S3 lifecycle policies to transition infrequently accessed objects to lower-cost storage classes.
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                S3 Intelligent Tiering Not Configured
+            </td>
+
+            <td class="severity-low">
+                LOW
+            </td>
+
+            <td>
+                Consider enabling S3 Intelligent Tiering to automatically optimize storage costs.
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                Potentially Oversized EC2 Instance
+            </td>
+
+            <td class="severity-medium">
+                MEDIUM
+            </td>
+
+            <td>
+                Detected EC2 instance type 'm5.4xlarge'. Review CPU and memory utilization and consider rightsizing.
+            </td>
         </tr>
         
 
@@ -381,7 +647,7 @@ pre {
     <div>
     
         <div>
-            Finding: S3 Bucket Missing Encryption<br><br>Risk: Data stored in the S3 bucket is unencrypted, exposing sensitive information to unauthorized access and potential data breaches.<br><br>Terraform Fix:<br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-secure-bucket"<br>  # other bucket settings<br>}<br><br>resource "aws_s3_bucket_server_side_encryption_configuration" "example" {<br>  bucket = aws_s3_bucket.example.id<br><br>  rule {<br>    apply_server_side_encryption_by_default {<br>      sse_algorithm = "AES256"<br>    }<br>  }<br>}<br>```<br><br>---<br><br>Finding: S3 Bucket Does Not Have Versioning Enabled<br><br>Risk: Without versioning, accidental deletions or overwrites are permanent, increasing data loss risk.<br><br>Terraform Fix:<br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-secure-bucket"<br>  # other bucket settings<br><br>  versioning {<br>    enabled = true<br>  }<br>}<br>```<br><br>---<br><br>Finding: S3 Bucket Public Access Is Not Restricted<br><br>Risk: Public access allows unauthorized users to read or write data, leading to potential data leakage or tampering.<br><br>Terraform Fix:<br>```hcl<br>resource "aws_s3_bucket_public_access_block" "example" {<br>  bucket = aws_s3_bucket.example.id<br><br>  block_public_acls       = true<br>  block_public_policy     = true<br>  ignore_public_acls      = true<br>  restrict_public_buckets = true<br>}<br>```
+            Finding: S3 Bucket Missing Encryption  <br>Risk: Data stored in the bucket is vulnerable to unauthorized access and breaches due to lack of encryption.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-bucket"<br>  server_side_encryption_configuration {<br>    rule {<br>      apply_server_side_encryption_by_default {<br>        sse_algorithm = "AES256"<br>      }<br>    }<br>  }<br>}<br>```<br><br>---<br><br>Finding: Open SSH Security Group  <br>Risk: Allows unrestricted SSH access from the internet, exposing instances to brute force attacks and unauthorized access.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_security_group" "ssh_restrict" {<br>  name        = "ssh_restrict"<br>  description = "Allow SSH access from known IPs only"<br>  vpc_id      = var.vpc_id<br><br>  ingress {<br>    from_port   = 22<br>    to_port     = 22<br>    protocol    = "tcp"<br>    cidr_blocks = ["203.0.113.0/24"]  # Replace with trusted IP range<br>  }<br><br>  egress {<br>    from_port   = 0<br>    to_port     = 0<br>    protocol    = "-1"<br>    cidr_blocks = ["0.0.0.0/0"]<br>  }<br>}<br>```<br><br>---<br><br>Finding: S3 Bucket Missing Public Access Block  <br>Risk: Public access to the bucket can lead to data exposure or leaks.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket_public_access_block" "example" {<br>  bucket                  = aws_s3_bucket.example.id<br>  block_public_acls       = true<br>  block_public_policy     = true<br>  ignore_public_acls      = true<br>  restrict_public_buckets = true<br>}<br>```<br><br>---<br><br>Finding: CIS Compliance Impact  <br>Risk: Non-compliance with CIS benchmarks may increase security vulnerabilities and risk regulatory penalties.  <br>Terraform Fix: Implement controls aligned with CIS benchmarks, including encryption, logging, versioning, and strict access controls. Example enabling bucket versioning and logging:  <br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-bucket"<br><br>  versioning {<br>    enabled = true<br>  }<br><br>  logging {<br>    target_bucket = aws_s3_bucket.log_bucket.id<br>    target_prefix = "log/"<br>  }<br>}<br>```<br><br>---<br><br>Finding: SOC2 Compliance Impact  <br>Risk: Failing SOC2 controls may compromise trust and contractual requirements around security, availability, and confidentiality.  <br>Terraform Fix: Enforce encryption, access logging, and strict IAM policies. Example S3 bucket encryption and logging:  <br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-bucket"<br><br>  server_side_encryption_configuration {<br>    rule {<br>      apply_server_side_encryption_by_default {<br>        sse_algorithm = "AES256"<br>      }<br>    }<br>  }<br><br>  logging {<br>    target_bucket = aws_s3_bucket.log_bucket.id<br>    target_prefix = "log/"<br>  }<br>}<br>```<br><br>---<br><br>Finding: PCI Compliance Impact  <br>Risk: Non-Payment Card Industry compliance risks data breaches that can result in fines and reputational damage.  <br>Terraform Fix: Enforce encryption for data at rest, restrict public access, and enable audit logging. Example:  <br>```hcl<br>resource "aws_s3_bucket_public_access_block" "example" {<br>  bucket                  = aws_s3_bucket.example.id<br>  block_public_acls       = true<br>  block_public_policy     = true<br>  ignore_public_acls      = true<br>  restrict_public_buckets = true<br>}<br><br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-bucket"<br><br>  server_side_encryption_configuration {<br>    rule {<br>      apply_server_side_encryption_by_default {<br>        sse_algorithm = "AES256"<br>      }<br>    }<br>  }<br><br>  logging {<br>    target_bucket = aws_s3_bucket.log_bucket.id<br>    target_prefix = "pci-logs/"<br>  }<br>}<br>```<br><br>---<br><br>Finding: Potentially Oversized EC2 Instance  <br>Risk: Over-provisioning leads to unnecessary costs without matching performance benefits.  <br>Terraform Fix: Adjust instance type to a smaller size based on workload analysis:  <br>```hcl<br>resource "aws_instance" "example" {<br>  ami           = "ami-123456"<br>  instance_type = "t3.medium"  # Adjust size according to workload<br>  subnet_id     = var.subnet_id<br>}<br>```<br><br>---<br><br>Finding: S3 Bucket Missing Versioning  <br>Risk: Lack of versioning prevents recovery from accidental deletion or overwrite, increasing data loss risk.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-bucket"<br><br>  versioning {<br>    enabled = true<br>  }<br>}<br>```<br><br>---<br><br>Finding: S3 Lifecycle Policy Missing  <br>Risk: Without lifecycle policies, storage costs may increase due to retention of non-essential or outdated data.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket_lifecycle_configuration" "example" {<br>  bucket = aws_s3_bucket.example.id<br><br>  rule {<br>    id     = "expire-old-objects"<br>    status = "Enabled"<br><br>    expiration {<br>      days = 365<br>    }<br><br>    filter {}<br>  }<br>}<br>```<br><br>---<br><br>Finding: S3 Intelligent Tiering Not Configured  <br>Risk: Failing to use intelligent tiering can increase storage costs by not automatically optimizing for access patterns.  <br>Terraform Fix:  <br>```hcl<br>resource "aws_s3_bucket" "example" {<br>  bucket = "my-bucket"<br><br>  lifecycle_rule {<br>    enabled = true<br><br>    transition {<br>      days          = 30<br>      storage_class = "INTELLIGENT_TIERING"<br>    }<br>  }<br>}<br>```
         </div>
         
 </div>
@@ -403,30 +669,23 @@ import (
 	"path/filepath"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestTerraformModule(t *testing.T) {
 	t.Parallel()
 
-	// Define the path to the Terraform code to test
-	terraformDir := "../path-to-terraform-code"
+	terraformDir, err := filepath.Abs("../")
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	// Initialize Terraform options with default retryable errors to handle common retryable errors in terraform testing.
 	terraformOptions := &terraform.Options{
 		TerraformDir: terraformDir,
 	}
 
-	// Clean up resources with "terraform destroy" at the end of the test.
 	defer terraform.Destroy(t, terraformOptions)
 
-	// Run "terraform init" and "terraform apply". Fail the test if there are any errors.
 	terraform.InitAndApply(t, terraformOptions)
-
-	// Optionally, add assertions here based on Terraform output variables or state.
-	// Example:
-	// output := terraform.Output(t, terraformOptions, "output_name")
-	// assert.Equal(t, "expected_value", output)
 }
 ```</pre>
 
