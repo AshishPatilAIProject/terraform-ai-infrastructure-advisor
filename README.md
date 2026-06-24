@@ -631,10 +631,3 @@ This project was built to explore:
 - Rule Engines
 
 ---
-
-## Version
-
-All Release:
-
-- v0.1.0 - Initial Terraform AI Reviewer
-- v0.2.0 - LangGraph Workflow Engine
