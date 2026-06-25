@@ -301,9 +301,9 @@ terraform-ai-reviewer/
 ### Clone Repository
 
 ```bash
-git clone https://github.com/AshishPatilAIProject/terraform-ai-reviewer.git
+git clone https://github.com/AshishPatilAIProject/terraform-ai-infrastructure-advisor.git
 
-cd terraform-ai-reviewer
+cd terraform-ai-infrastructure-advisor
 ```
 
 ### Create Virtual Environment
@@ -357,7 +357,7 @@ OPENAI_API_KEY=your_api_key_here
 Review Terraform:
 
 ```bash
-python reviewer.py sample1.tf
+python reviewer.py tests\sample1.tf
 ```
 
 Console output:
